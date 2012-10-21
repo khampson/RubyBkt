@@ -1,0 +1,108 @@
+Bucket
+Written by Ken Hampson, hampsonk+github@gmail.com
+
+Notes regarding the running of this code (as of 2/02/2012):
+
+Developed, ran and tested on a Core i7, Windows 7 box.
+
+To run:
+
+1a. Download and run the Ruby Installer for Windows for Ruby 1.9.3-p0
+	http://rubyforge.org/frs/download.php/75465/rubyinstaller-1.9.3-p0.exe
+
+1b. Download and run the 7-Zip install for Windows 64
+	http://downloads.sourceforge.net/sevenzip/7z920-x64.msi
+	
+	Install in the default location (C:\Program Files\7-Zip)
+		If installing in a different location, the @ZIP_PROG variable in Compresser.rb can be changed to the new location.
+
+2. The following assumes:
+	- A Ruby install location of "c:\Ruby\Ruby193"
+	- That the zip file containing this readme file is located in "C:\code\bkt".
+
+3. Optionally, an accompanying program, testDriver.rb, can be run to generate a randomized set of large data files upon which
+   Bucket can be run.
+
+   To run this program to generate that data set, a command line of the following form can be used:
+
+   c:\Ruby\Ruby193\bin\ruby -I"C:\code\bkt" testDriver.rb --path E:\tmp\bktTest
+
+   Where:
+	--path is the directory in which to create the test file data set
+	--num <N> optionally specifies the number of files to create (default is 20)
+
+
+   In my case, this resulted in a directory containing the following 20 files:
+
+	 Directory of E:\tmp\bktTest
+
+	01/31/2012  01:22    <DIR>          .
+	01/31/2012  01:22    <DIR>          ..
+	01/31/2012  00:51       252,289,720 testFile1.dat
+	01/31/2012  00:54       274,058,066 testFile10.dat
+	01/31/2012  00:55     1,060,178,513 testFile11.dat
+	01/31/2012  00:55     1,229,109,455 testFile12.dat
+	01/31/2012  00:56     1,399,924,931 testFile13.dat
+	01/31/2012  00:56       205,239,333 testFile14.dat
+	01/31/2012  00:56     1,045,569,190 testFile15.dat
+	01/31/2012  00:57       814,243,592 testFile16.dat
+	01/31/2012  00:57       572,803,544 testFile17.dat
+	01/31/2012  00:57       318,360,934 testFile18.dat
+	01/31/2012  00:57       315,878,552 testFile19.dat
+	01/31/2012  00:52     1,343,343,074 testFile2.dat
+	01/31/2012  00:58       653,071,676 testFile20.dat
+	01/31/2012  00:52       855,676,676 testFile3.dat
+	01/31/2012  00:53     1,277,097,124 testFile4.dat
+	01/31/2012  00:53       761,824,534 testFile5.dat
+	01/31/2012  00:53       376,022,813 testFile6.dat
+	01/31/2012  00:53       230,295,782 testFile7.dat
+	01/31/2012  00:54       758,092,278 testFile8.dat
+	01/31/2012  00:54       345,101,130 testFile9.dat
+	              20 File(s) 14,088,180,917 bytes
+
+
+4. To run Bucket, a command line of the following form, using the same Ruby-install and code locations as above, can be used:
+
+   c:\Ruby\Ruby193\bin\ruby -I"C:\code\bkt" bkt.rb --path E:\tmp\bktTest --root E:\tmp\bktTest\out --sets 2 --pwd foo
+
+   Where:
+	-I designates the $LOAD_PATH directory (location from which required modules are loaded)
+	--path indicates the path against which to run the program
+	--root is the path to which to output the resulting archive zip files
+	--sets is the number of file sets to generate from the --path location
+	--pwd is the password to assign to the resulting archive zip files
+
+
+   In my case, this resulted in a directory containing the following archive files:
+
+	 Directory of E:\tmp\bktTest\out
+
+	01/31/2012  01:56    <DIR>          .
+	01/31/2012  01:56    <DIR>          ..
+	01/31/2012  01:32     2,743,268,257 arch1-1.zip
+	01/31/2012  01:34     1,801,913,253 arch1-2.zip
+	01/31/2012  01:38     3,382,845,195 arch2-1.zip
+	01/31/2012  01:40     1,174,037,862 arch2-2.zip
+               4 File(s)  9,102,064,567 bytes
+
+
+The command line specified that 2 sets be created, which is reflected in the arch1* and arch2* files. There are two of each
+in this case because Bucket determined the original file set exceeded the 4 GB mark (a threshold after which many Zip tools
+experience issues or specifically refuse to open the archive due to size limitations), so Bucket split each file set into a
+subset and zipped both.
+
+All archives in this case had the password "foo".
+
+
+Additional notes about Bucket and its associated code:
+
+- A help menu of options can be displayed using the -h switch (c:\Ruby\Ruby193\bin\ruby -I"C:\code\bkt" bkt.rb -h).
+
+- Bucket maintains a detailed log to facilitate debugging and provide historical records. This is stored in the same
+  directory as bkt.rb, and is entitled "bucket.log".
+	- The log facility is largely driven by the Utils.printMux function and its related constants in the Utils module.
+
+- testDriver maintains a detailed log as well for similar purposes. This is stored in the same directory as "testDriver.rb"
+  and is entitled "testDriver.log".
+	- It is also largely driven by Utils.printMux and its related constants in the Utils module.
+
