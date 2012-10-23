@@ -1,4 +1,4 @@
-# Load the files in gvim in remote tabs, assuming a server name of GVIM (must be currently running).
+# Load the files in gvim in remote tabs, first starting a server in which to load them.
 
 gvim --servername GV_RUBY_BKT
 gvim --servername GV_RUBY_BKT --remote-tab bkt.rb \
